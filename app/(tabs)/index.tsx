@@ -1,31 +1,51 @@
-import { StyleSheet } from 'react-native';
+// app/(tabs)/index.tsx
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+/**
+ * Task list screen
+ * Renders the list of tasks using FlatList and TaskItem component.
+ * Pulls initial data from mockTasks and allows future state updates.
+ */
 
-export default function TabOneScreen() {
+import React, { useState } from 'react';
+import { FlatList, SafeAreaView, Text, View, StyleSheet } from 'react-native';
+import { mockTasks } from '../../data/mockTasks';
+import TaskItem from '../../components/TaskItem';
+import { Task } from '../../types/Task';
+
+export default function TaskListScreen() {
+  const [tasks, setTasks] = useState<Task[]>(mockTasks);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.heading}>My Tasks</Text>
+      <FlatList
+        data={tasks}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <TaskItem task={item} />}
+        ListEmptyComponent={
+          <Text style={styles.empty}>You have no tasks for now.</Text>
+        }
+      />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingHorizontal: 16,
+    paddingTop: 24,
+    backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 20,
+  heading: {
+    fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 16,
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  empty: {
+    marginTop: 20,
+    fontStyle: 'italic',
+    color: '#999',
+    textAlign: 'center',
   },
 });
