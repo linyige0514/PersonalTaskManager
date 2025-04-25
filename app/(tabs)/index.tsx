@@ -12,7 +12,11 @@ import { Link } from 'expo-router';
 /**
  * Task list screen (Home screen)
  * Renders the list of tasks using FlatList and TaskItem component.
- * Pulls initial data from mockTasks and allows future state updates.
+ * Pulls initial data from mockTasks and allows future state updates:
+ *  - Adding new tasks via params
+ *  - Editing tasks
+ *  - Deleting tasks
+ *  - Deleting tasks
  */
 export default function TaskListScreen() {
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
@@ -20,25 +24,42 @@ export default function TaskListScreen() {
   const params = useLocalSearchParams();
 
   /**
-   * useEffect to handle new task passed via params
-   * Parses the new task and adds it to the state
+   * Handle newly added task or updated task
    */
   useEffect(() => {
+    // If there's a new task, parse and try to insert
     if (params?.newTask) {
       try {
-        const parsedTask: Task = JSON.parse(params.newTask as string);
-  
-        // Avoid duplicates: check if task already exists
-        const exists = tasks.some((t) => t.id === parsedTask.id);
+        const newTask: Task = JSON.parse(params.newTask as string);
+        const exists = tasks.some((t) => t.id === newTask.id);
         if (!exists) {
-          setTasks((prev) => [parsedTask, ...prev]);
+          setTasks((prev) => [newTask, ...prev]);
         }
-        
       } catch (e) {
         console.warn('Failed to parse new task:', e);
       }
     }
-  }, [params?.newTask]);
+  
+    // If there's an updated task, parse and replace
+    if (params?.updatedTask) {
+      try {
+        const updatedTask: Task = JSON.parse(params.updatedTask as string);
+        setTasks((prev) => {
+          const exists = prev.some((t) => t.id === updatedTask.id);
+          if (exists) {
+            return prev.map((t) =>
+              t.id === updatedTask.id ? updatedTask : t
+            );
+          } else {
+            // If the task wasn't added yet (e.g. due to render timing), add it
+            return [updatedTask, ...prev];
+          }
+        });
+      } catch (e) {
+        console.warn('Failed to parse updated task:', e);
+      }
+    }
+  }, [params?.newTask, params?.updatedTask]);
 
   return (
     <SafeAreaView style={styles.container}>

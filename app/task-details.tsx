@@ -1,3 +1,5 @@
+// app/task-details.tsx
+
 import React from 'react';
 import { View, Text, StyleSheet, Button, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -6,7 +8,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
  * TaskDetailsScreen
  *
  * Displays task details passed via route params.
- * Placeholder actions are provided for edit, delete, and toggle status.
+ * Allows nevigation to edit, delete, or toggle task status.
  */
 
 export default function TaskDetailsScreen() {
@@ -21,24 +23,45 @@ export default function TaskDetailsScreen() {
     );
   }
 
-  // Placeholders for future logic
+/**
+ * handleEdit
+ * Navigates to the Edit Task screen, passing the current task's info
+ */
   const handleEdit = () => {
-    Alert.alert('Delete Task', 'Feature not implemented yet.');
+    router.push({
+      pathname: '../edit-task',
+      params: {
+        id: String(id),
+        title: String(title),
+        description: String(description),
+        status: String(status),
+      },
+    });
   };
 
+/**
+ * handleDelete
+ * Placeholder for future delete functionality
+ */
   const handleDelete = () => {
-    Alert.alert('Delete Task', 'Feature not implemented yet.');
+    Alert.alert('Delete Task', 'Delete functionality coming soon!');
   };
 
+  /**
+   * handleToggleStatus
+   * Placeholder for future toggle status functionality
+   */
   const handleToggleStatus = () => {
-    Alert.alert('Toggle Status', 'Feature not implemented yet.');
+    Alert.alert('Toggle Status', 'Toggle status feature coming soon!');
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
+
       <Text style={styles.label}>Description:</Text>
       <Text style={styles.text}>{description}</Text>
+      
       <Text style={styles.label}>Status:</Text>
       <Text style={styles.text}>{status}</Text>
 
