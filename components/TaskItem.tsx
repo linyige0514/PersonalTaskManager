@@ -3,19 +3,21 @@
 /**
  * TaskItem component
  * Displays individual task details in the task list.
+ * When pressed, navigates to Task Details screen with full task information.
  *
  * Props:
  * - task: A Task object with title, description, and status
  *
  * Used in:
  * - Task list screen (Feature 1)
- * - Status toggle UI (Feature 5)
  * - Navigation to detail screen (Feature 6)
+ * - Include in task edit(Feature 3), delete(Feature 4), toggle status function(Feature 5)
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Task } from '../types/Task';
+import { Link } from 'expo-router';
 
 interface Props {
   task: Task;
@@ -23,11 +25,24 @@ interface Props {
 
 export default function TaskItem({ task }: Props) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{task.title}</Text>
-      <Text>{task.description}</Text>
-      <Text style={styles.status}>Status: {task.status}</Text>
-    </View>
+    <Link
+      href={{
+        pathname: '../task-details',
+        params: {
+          id: task.id,
+          title: task.title,
+          description: task.description,
+          status: task.status,
+        },
+      }}
+      asChild
+    >
+      <Pressable style={styles.container}>
+        <Text style={styles.title}>{task.title}</Text>
+        <Text>{task.description}</Text>
+        <Text style={styles.status}>Status: {task.status}</Text>
+      </Pressable>
+    </Link>
   );
 }
 
