@@ -1,13 +1,12 @@
 // app/(tabs)/index.tsx
 
 import React, { useEffect, useState } from 'react';
-import { FlatList, SafeAreaView, Text, View, StyleSheet, Pressable} from 'react-native';
+import { FlatList, SafeAreaView, Text, View, StyleSheet, Pressable, TextInput} from 'react-native';
 import { mockTasks } from '../../data/mockTasks';
 import TaskItem from '../../components/TaskItem';
 import { Task } from '../../types/Task';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams, Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
 
 /**
  * Task list screen (Home screen)
@@ -20,6 +19,7 @@ import { Link } from 'expo-router';
  */
 export default function TaskListScreen() {
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
+  const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
   const params = useLocalSearchParams();
 
@@ -71,6 +71,13 @@ export default function TaskListScreen() {
     }
   }, [params?.deletedTaskId]);
 
+  /**
+   * Filter tasks based on search query
+   */
+  const filteredTasks = tasks.filter((task) =>
+    task.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -82,12 +89,23 @@ export default function TaskListScreen() {
         </Link>
       </View>
 
+      {/* Search bar */}
+      <TextInput
+        placeholder="Search tasks by title..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        style={styles.searchInput}
+      />
+
+      {/* Task list */}
       <FlatList
-        data={tasks}
+        data={filteredTasks}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <TaskItem task={item} />}
         ListEmptyComponent={
-          <Text style={styles.empty}>You have no tasks for now.</Text>
+          <Text style={styles.empty}>
+            {searchQuery ? 'No matching tasks found.' : 'You have no tasks for now.'}
+          </Text>
         }
       />
     </SafeAreaView>
@@ -111,6 +129,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
+  },
+  searchInput: {
+    backgroundColor: '#f0f0f0',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    marginBottom: 12,
+    fontSize: 16,
   },
   empty: {
     marginTop: 20,
