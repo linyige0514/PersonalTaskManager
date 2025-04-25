@@ -11,11 +11,10 @@ import { Ionicons } from '@expo/vector-icons';
 /**
  * Task list screen (Home screen)
  * Renders the list of tasks using FlatList and TaskItem component.
- * Pulls initial data from mockTasks and allows future state updates:
+ * Pulls initial data from mockTasks and allows for:
  *  - Adding tasks
- *  - Editing tasks
- *  - Deleting tasks
- *  - Toggling task status
+ *  - Searching tasks by title
+ * The screen also handles updates and deletions of tasks via URL parameters.
  */
 export default function TaskListScreen() {
   const [tasks, setTasks] = useState<Task[]>(mockTasks);

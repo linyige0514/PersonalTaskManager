@@ -11,7 +11,12 @@
  * Used in:
  * - Task list screen (Feature 1)
  * - Navigation to detail screen (Feature 6)
- * - Include in task edit(Feature 3), delete(Feature 4), toggle status function(Feature 5)
+ * 
+ * Provides details for:
+ * - task edit(Feature 3)
+ * - delete(Feature 4)
+ * - toggle status function(Feature 5)
+ * - search by title(Feature 2)
  */
 
 import React from 'react';
