@@ -63,13 +63,41 @@ const handleDelete = () => {
   );
   };
 
-  /**
-   * handleToggleStatus
-   * Placeholder for future toggle status functionality
-   */
-  const handleToggleStatus = () => {
-    Alert.alert('Toggle Status', 'Toggle status feature coming soon!');
+
+/**
+ * handleToggleStatus
+ * Cycles through predefined status values and updates the task
+ */
+const handleToggleStatus = () => {
+  const statusCycle = ['pending', 'in progress', 'completed'];
+  const currentIndex = statusCycle.indexOf(String(status));
+  const nextStatus = statusCycle[(currentIndex + 1) % statusCycle.length];
+
+  const updatedTask = {
+    id: String(id),
+    title: String(title),
+    description: String(description),
+    status: nextStatus,
   };
+
+  Alert.alert(
+    'Status Updated',
+    `Task marked as "${nextStatus}".`,
+    [
+      {
+        text: 'OK',
+        onPress: () => {
+          router.push({
+            pathname: '/',
+            params: {
+              updatedTask: JSON.stringify(updatedTask),
+            },
+          });
+        },
+      },
+    ]
+  );
+};
 
   return (
     <View style={styles.container}>
