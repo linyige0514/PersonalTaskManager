@@ -41,10 +41,26 @@ export default function TaskDetailsScreen() {
 
 /**
  * handleDelete
- * Placeholder for future delete functionality
+ * Confirms with user, then routes back to Home passing deletedTaskId
  */
-  const handleDelete = () => {
-    Alert.alert('Delete Task', 'Delete functionality coming soon!');
+const handleDelete = () => {
+  Alert.alert(
+    'Confirm Deletion',
+    'Are you sure you want to delete this task?',
+    [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => {
+          router.push({
+            pathname: '/',
+            params: { deletedTaskId: String(id) },
+          });
+        },
+      },
+    ]
+  );
   };
 
   /**

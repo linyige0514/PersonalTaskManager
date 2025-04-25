@@ -13,10 +13,10 @@ import { Link } from 'expo-router';
  * Task list screen (Home screen)
  * Renders the list of tasks using FlatList and TaskItem component.
  * Pulls initial data from mockTasks and allows future state updates:
- *  - Adding new tasks via params
+ *  - Adding tasks
  *  - Editing tasks
  *  - Deleting tasks
- *  - Deleting tasks
+ *  - Toggling task status
  */
 export default function TaskListScreen() {
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
@@ -60,6 +60,16 @@ export default function TaskListScreen() {
       }
     }
   }, [params?.newTask, params?.updatedTask]);
+
+/**
+ * Handle deleted tasks
+ */
+  useEffect(() => {
+    if (params?.deletedTaskId) {
+      const taskIdToDelete = String(params.deletedTaskId);
+      setTasks((prev) => prev.filter((t) => t.id !== taskIdToDelete));
+    }
+  }, [params?.deletedTaskId]);
 
   return (
     <SafeAreaView style={styles.container}>
